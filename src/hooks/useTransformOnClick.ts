@@ -1,44 +1,37 @@
 import { useThree } from "react-three-fiber";
-import { useEffect, useRef, useState } from "react";
-import { Group, Object3D } from "three";
+import { useEffect, useMemo, useRef } from "react";
+import * as THREE from "three";
+import { Group, Object3D, SkinnedMesh } from "three";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls";
 
 export function useTransformOnClick(orbitalControls) {
   const { raycaster, gl, camera, scene, invalidate } = useThree();
-  const transformControls = useRef<TransformControls>(
-    new TransformControls(camera, gl.domElement)
+  const transformControls = useMemo<TransformControls>(
+    () => new TransformControls(camera, gl.domElement),
+    []
   );
 
+  const objectRef = useRef<Object3D>(null);
+
   useEffect(() => {
-    function setChangingTrue() {
-      orbitalControls.current.enabled = false;
-    }
+    function handleChange(e) {
+      orbitalControls.current.enabled = !e.value;
+      scene.traverse((object) => {
+        object.updateMatrix();
+      });
+      const box = new THREE.BoxHelper(e.target.object, 0xffff00);
+      scene.add(box);
 
-    function setChangingFalse() {
-      orbitalControls.current.enabled = true;
-    }
-
-    function handleChange() {
       invalidate();
     }
 
-    transformControls.current.addEventListener("mouseDown", setChangingTrue);
-    transformControls.current.addEventListener("mouseUp", setChangingFalse);
-    transformControls.current.addEventListener("change", handleChange);
-    scene.add(transformControls.current);
-    transformControls.current.mode = "rotate";
-    transformControls.current.space = "local";
+    transformControls.addEventListener("dragging-changed", handleChange);
+    scene.add(transformControls);
+    transformControls.mode = "rotate";
 
     return () => {
-      transformControls.current.removeEventListener(
-        "mouseDown",
-        setChangingTrue
-      );
-      transformControls.current.removeEventListener(
-        "mouseUp",
-        setChangingFalse
-      );
-      transformControls.current.removeEventListener("change", handleChange);
+      transformControls.removeEventListener("dragging-changed", handleChange);
+      transformControls.dispose();
     };
   }, []);
 
@@ -61,9 +54,12 @@ export function useTransformOnClick(orbitalControls) {
         const object = intersects[0].object;
 
         // @ts-ignore
-        transformControls.current.attach(object.skeleton.bones[0]);
+        transformControls.attach(object.skeleton.bones[0]);
+        objectRef.current = object;
+        const helper = new THREE.SkeletonHelper(object);
+        scene.add(helper);
       } else {
-        transformControls.current.detach();
+        transformControls.detach();
       }
     }
 

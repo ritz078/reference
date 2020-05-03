@@ -1,10 +1,4 @@
-import React, {
-  memo,
-  Suspense,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-} from "react";
+import React, { memo, Suspense, useEffect, useRef } from "react";
 import { Male } from "../Male";
 import { Dom, useThree } from "react-three-fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -12,6 +6,7 @@ import * as THREE from "three";
 import { Group } from "three";
 import { useHighlightOnHover } from "../../hooks/useHighlightOnHover";
 import { useTransformOnClick } from "../../hooks/useTransformOnClick";
+import { instanceOf, object } from "prop-types";
 
 function _ModelContainer() {
   const { scene, gl, camera, invalidate } = useThree();
@@ -62,7 +57,6 @@ function _ModelContainer() {
     scene.children
       .find((child) => child instanceof Group && child.name === "model")
       ?.children.forEach((object) => {
-        console.log(object);
         object.addEventListener("click", console.log);
       });
   }, []);
