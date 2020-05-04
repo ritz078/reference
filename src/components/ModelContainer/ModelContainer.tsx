@@ -1,18 +1,41 @@
-import React, { memo, Suspense, useEffect, useRef } from "react";
+import React, {
+  memo,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 import { Male } from "../Male";
-import { Dom, useThree } from "react-three-fiber";
+import { Dom, useFrame, useThree } from "react-three-fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
-import { Group } from "three";
+import {
+  Box3,
+  Group,
+  SkinnedMesh,
+  BoxHelper,
+  Mesh,
+  Object3D,
+  BufferGeometry,
+  BoxBufferGeometry,
+  MeshBasicMaterial,
+} from "three";
 import { useHighlightOnHover } from "../../hooks/useHighlightOnHover";
 import { useTransformOnClick } from "../../hooks/useTransformOnClick";
 import { instanceOf, object } from "prop-types";
+import { TransformControls } from "three/examples/jsm/controls/TransformControls";
 
 function _ModelContainer() {
   const { scene, gl, camera, invalidate } = useThree();
   const orbitalControls = useRef(new OrbitControls(camera, gl.domElement));
+  const transformControls = useMemo<TransformControls>(
+    () => new TransformControls(camera, gl.domElement),
+    []
+  );
 
-  useTransformOnClick(orbitalControls);
+  const bbox = useRef<Box3>(null);
+  // useTransformOnClick(orbitalControls);
   useHighlightOnHover();
 
   useEffect(() => {
@@ -61,6 +84,49 @@ function _ModelContainer() {
       });
   }, []);
 
+  useEffect(() => {
+    function handleChange(e) {
+      orbitalControls.current.enabled = !e.value;
+
+      console.log(bbox.current.clone());
+      invalidate();
+    }
+
+    transformControls.addEventListener("dragging-changed", handleChange);
+    scene.add(transformControls);
+    transformControls.mode = "rotate";
+
+    return () => {
+      transformControls.removeEventListener("dragging-changed", handleChange);
+      transformControls.dispose();
+    };
+  }, [bbox.current]);
+
+  useFrame(() => {});
+
+  const handleClick = useCallback((e) => {
+    const mesh: SkinnedMesh = e.object;
+    if (!mesh.skeleton) return;
+    const rootBone = mesh.skeleton.bones[0];
+
+    bbox.current = mesh.geometry.boundingBox;
+
+    const _mesh = new Mesh(
+      new BoxBufferGeometry(),
+      new MeshBasicMaterial({ color: 0x00ff00 })
+    );
+
+    _mesh.applyMatrix4(mesh.matrix);
+
+    rootBone.add(_mesh);
+
+    // bbox.current.setFromObject(rootBone);
+    console.log(_mesh, mesh);
+    const _bbox = new BoxHelper(_mesh, "green");
+    scene.add(_bbox);
+    transformControls.attach(rootBone);
+  }, []);
+
   return (
     <Suspense
       fallback={
@@ -69,7 +135,7 @@ function _ModelContainer() {
         </Dom>
       }
     >
-      <Male />
+      <Male onClick={handleClick} />
     </Suspense>
   );
 }

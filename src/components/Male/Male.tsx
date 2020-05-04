@@ -9,7 +9,7 @@ import { draco, TransformControls } from "drei";
 import { Object3D } from "three";
 import * as THREE from "three";
 
-export function Male() {
+export function Male(props) {
   // @ts-ignore
   const { nodes, materials } = useLoader(
     GLTFLoader,
@@ -18,7 +18,7 @@ export function Male() {
   );
 
   return (
-    <group name="model" dispose={null}>
+    <group name="model" {...props} dispose={null}>
       <group position={[0, 101.72, 2.71]}>
         <primitive object={nodes.Pelvis} />
         <primitive object={nodes.Spine_1} />

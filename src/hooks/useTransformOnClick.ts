@@ -1,7 +1,7 @@
 import { useThree } from "react-three-fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { Group, Object3D, SkinnedMesh } from "three";
+import { Box3, Geometry, Group, Mesh, Object3D } from "three";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls";
 
 export function useTransformOnClick(orbitalControls) {
@@ -11,17 +11,13 @@ export function useTransformOnClick(orbitalControls) {
     []
   );
 
-  const objectRef = useRef<Object3D>(null);
+  const bbox = useRef<Box3>(null);
 
   useEffect(() => {
     function handleChange(e) {
       orbitalControls.current.enabled = !e.value;
-      scene.traverse((object) => {
-        object.updateMatrix();
-      });
-      const box = new THREE.BoxHelper(e.target.object, 0xffff00);
-      scene.add(box);
 
+      console.log(bbox.current);
       invalidate();
     }
 
@@ -33,7 +29,7 @@ export function useTransformOnClick(orbitalControls) {
       transformControls.removeEventListener("dragging-changed", handleChange);
       transformControls.dispose();
     };
-  }, []);
+  }, [bbox.current]);
 
   useEffect(() => {
     function handleClick(ev: MouseEvent) {
@@ -51,13 +47,21 @@ export function useTransformOnClick(orbitalControls) {
         .filter((child) => child.object?.skeleton?.bones?.length);
 
       if (intersects.length) {
-        const object = intersects[0].object;
+        const mesh = intersects[0].object;
+        const rootBone = mesh.skeleton.bones[0];
 
+        transformControls.attach(rootBone);
+
+        mesh.geometry.computeBoundingBox();
+
+        // add an invisible box around the bone and attach it to the bone.
+        bbox.current = mesh.geometry.boundingBox;
         // @ts-ignore
-        transformControls.attach(object.skeleton.bones[0]);
-        objectRef.current = object;
-        const helper = new THREE.SkeletonHelper(object);
-        scene.add(helper);
+        const _mesh = new Mesh(mesh.geometry.clone());
+
+        const bone = mesh.add(_mesh);
+        console.log(bone);
+        bbox.current.setFromObject(rootBone);
       } else {
         transformControls.detach();
       }

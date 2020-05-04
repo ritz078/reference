@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "drei": "^0.0.18",
@@ -23,6 +24,8 @@
     "@types/node": "^13.13.4",
     "@types/react": "^16.9.34",
     "husky": "^4.2.5",
+    "patch-package": "^6.2.2",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
     "sass": "^1.26.5",
