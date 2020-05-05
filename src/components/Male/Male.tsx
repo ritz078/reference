@@ -17,6 +17,8 @@ export function Male(props) {
     draco("/draco-gltf/")
   );
 
+  useEffect(props.onLoad, []);
+
   return (
     <group name="model" {...props} dispose={null}>
       <group position={[0, 101.72, 2.71]}>

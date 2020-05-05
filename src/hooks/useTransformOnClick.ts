@@ -11,13 +11,9 @@ export function useTransformOnClick(orbitalControls) {
     []
   );
 
-  const bbox = useRef<Box3>(null);
-
   useEffect(() => {
     function handleChange(e) {
       orbitalControls.current.enabled = !e.value;
-
-      console.log(bbox.current);
       invalidate();
     }
 
@@ -29,7 +25,7 @@ export function useTransformOnClick(orbitalControls) {
       transformControls.removeEventListener("dragging-changed", handleChange);
       transformControls.dispose();
     };
-  }, [bbox.current]);
+  }, []);
 
   useEffect(() => {
     function handleClick(ev: MouseEvent) {
@@ -51,17 +47,6 @@ export function useTransformOnClick(orbitalControls) {
         const rootBone = mesh.skeleton.bones[0];
 
         transformControls.attach(rootBone);
-
-        mesh.geometry.computeBoundingBox();
-
-        // add an invisible box around the bone and attach it to the bone.
-        bbox.current = mesh.geometry.boundingBox;
-        // @ts-ignore
-        const _mesh = new Mesh(mesh.geometry.clone());
-
-        const bone = mesh.add(_mesh);
-        console.log(bone);
-        bbox.current.setFromObject(rootBone);
       } else {
         transformControls.detach();
       }
