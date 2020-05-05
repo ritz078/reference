@@ -11,32 +11,26 @@ import { Dom, useFrame, useThree } from "react-three-fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
 import {
-  Box3,
   Group,
   SkinnedMesh,
-  BoxHelper,
   Mesh,
-  Object3D,
-  BufferGeometry,
   BoxBufferGeometry,
   MeshBasicMaterial,
+  Bone,
 } from "three";
-import { useHighlightOnHover } from "../../hooks/useHighlightOnHover";
-import { useTransformOnClick } from "../../hooks/useTransformOnClick";
-import { instanceOf, object } from "prop-types";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls";
 
 function _ModelContainer() {
-  const { scene, gl, camera, invalidate } = useThree();
+  const { scene, gl, camera, invalidate, raycaster } = useThree();
   const orbitalControls = useRef(new OrbitControls(camera, gl.domElement));
   const transformControls = useMemo<TransformControls>(
     () => new TransformControls(camera, gl.domElement),
     []
   );
 
-  const bbox = useRef<Box3>(null);
+  const transformingSkin = useRef<SkinnedMesh>(null);
   // useTransformOnClick(orbitalControls);
-  useHighlightOnHover();
+  // useHighlightOnHover();
 
   useEffect(() => {
     orbitalControls.current.addEventListener("change", invalidate);
@@ -77,6 +71,11 @@ function _ModelContainer() {
   }, []);
 
   useEffect(() => {
+    const x = raycaster.intersectObjects(scene.children);
+    console.log(x[0].object);
+  }, []);
+
+  useEffect(() => {
     scene.children
       .find((child) => child instanceof Group && child.name === "model")
       ?.children.forEach((object) => {
@@ -85,47 +84,61 @@ function _ModelContainer() {
   }, []);
 
   useEffect(() => {
+    let _mesh;
     function handleChange(e) {
       orbitalControls.current.enabled = !e.value;
+      const bone: Bone = e.target.object;
+      console.log(bone, e.value);
+      if (e.value) {
+        _mesh = new Mesh(
+          new BoxBufferGeometry(10, 10, 10),
+          new MeshBasicMaterial({ color: 0x00ff00 })
+        );
 
-      console.log(bbox.current.clone());
-      invalidate();
+        bone.add(_mesh);
+      } else {
+        bone.remove(_mesh);
+        _mesh = null;
+        transformingSkin.current = null;
+      }
     }
 
     transformControls.addEventListener("dragging-changed", handleChange);
+    transformControls.addEventListener("change", invalidate);
     scene.add(transformControls);
     transformControls.mode = "rotate";
 
     return () => {
       transformControls.removeEventListener("dragging-changed", handleChange);
+      transformControls.addEventListener("change", invalidate);
       transformControls.dispose();
     };
-  }, [bbox.current]);
+  }, [transformingSkin.current]);
 
-  useFrame(() => {});
+  useFrame(() => {
+    if (transformingSkin.current) {
+      const _bbox = transformingSkin.current.geometry.boundingBox;
+      const rootBone = transformingSkin.current.skeleton.bones[0];
+      _bbox.setFromObject(rootBone);
 
-  const handleClick = useCallback((e) => {
-    const mesh: SkinnedMesh = e.object;
-    if (!mesh.skeleton) return;
-    const rootBone = mesh.skeleton.bones[0];
+      transformingSkin.current.updateWorldMatrix(true, true);
+    }
+  });
 
-    bbox.current = mesh.geometry.boundingBox;
+  const handleClick = useCallback(
+    (e) => {
+      const mesh: SkinnedMesh = e.object;
 
-    const _mesh = new Mesh(
-      new BoxBufferGeometry(),
-      new MeshBasicMaterial({ color: 0x00ff00 })
-    );
+      console.log(mesh);
+      if (!mesh.skeleton) return;
+      const rootBone = mesh.skeleton.bones[0];
 
-    _mesh.applyMatrix4(mesh.matrix);
+      transformingSkin.current = mesh;
 
-    rootBone.add(_mesh);
-
-    // bbox.current.setFromObject(rootBone);
-    console.log(_mesh, mesh);
-    const _bbox = new BoxHelper(_mesh, "green");
-    scene.add(_bbox);
-    transformControls.attach(rootBone);
-  }, []);
+      transformControls.attach(rootBone);
+    },
+    [transformingSkin.current]
+  );
 
   return (
     <Suspense
