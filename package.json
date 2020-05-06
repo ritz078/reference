@@ -9,19 +9,19 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "drei": "^0.0.18",
+    "drei": "^0.0.29",
     "lerp": "^1.0.3",
-    "next": "9.3.5",
+    "next": "9.3.6",
     "next-transpile-modules": "^3.3.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-promise-suspense": "^0.3.3",
-    "react-three-fiber": "^4.1.2",
+    "react-three-fiber": "^4.1.4",
     "react-three-gui": "^0.1.5",
     "three": "^0.116.1"
   },
   "devDependencies": {
-    "@types/node": "^13.13.4",
+    "@types/node": "^13.13.5",
     "@types/react": "^16.9.34",
     "husky": "^4.2.5",
     "patch-package": "^6.2.2",

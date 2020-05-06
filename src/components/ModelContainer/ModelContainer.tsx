@@ -1,4 +1,12 @@
-import React, { memo, Suspense, useCallback, useEffect, useRef } from "react";
+import React, {
+  memo,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Male } from "../Male";
 import { Dom, useFrame, useThree } from "react-three-fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -13,24 +21,28 @@ import {
 import { useTransformOnClick } from "../../hooks/useTransformOnClick";
 
 function _ModelContainer() {
-  const { scene, gl, camera, invalidate, raycaster } = useThree();
-  const orbitalControls = useRef(new OrbitControls(camera, gl.domElement));
+  const { scene, gl, camera, invalidate } = useThree();
+  const orbitalControls = useMemo(
+    () => new OrbitControls(camera, gl.domElement),
+    []
+  );
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const transformingSkin = useRef<SkinnedMesh>(null);
-  useTransformOnClick(orbitalControls);
+  useTransformOnClick(orbitalControls, isLoaded);
   // useHighlightOnHover();
 
   useEffect(() => {
-    orbitalControls.current.addEventListener("change", invalidate);
+    orbitalControls.addEventListener("change", invalidate);
 
     return () => {
-      orbitalControls.current.removeEventListener("change", invalidate);
+      orbitalControls.removeEventListener("change", invalidate);
     };
   }, []);
 
   useEffect(() => {
-    orbitalControls.current.target = new THREE.Vector3(0, 100, 0);
-    orbitalControls.current.update();
+    orbitalControls.target = new THREE.Vector3(0, 100, 0);
+    orbitalControls.update();
   }, []);
 
   useEffect(() => {
@@ -66,16 +78,6 @@ function _ModelContainer() {
       });
   }, []);
 
-  useFrame(() => {
-    if (transformingSkin.current) {
-      const _bbox = transformingSkin.current.geometry.boundingBox;
-      const rootBone = transformingSkin.current.skeleton.bones[0];
-      _bbox.setFromObject(rootBone);
-
-      transformingSkin.current.updateWorldMatrix(true, true);
-    }
-  });
-
   const onLoad = useCallback(() => {
     scene.traverse((object) => {
       if (object instanceof SkinnedMesh) {
@@ -86,12 +88,15 @@ function _ModelContainer() {
           new SphereBufferGeometry(8, 20, 20),
           new MeshBasicMaterial({ color: "red", wireframe: true })
         );
+        mesh.name = object.id.toString(10);
         rootBone.add(mesh);
 
         bbox.setFromObject(rootBone);
       }
     });
-  }, [scene, raycaster]);
+
+    setIsLoaded(true);
+  }, []);
 
   return (
     <Suspense

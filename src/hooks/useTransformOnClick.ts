@@ -1,10 +1,9 @@
 import { useThree } from "react-three-fiber";
-import { useEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
-import { Box3, Geometry, Group, Mesh, Object3D } from "three";
+import { useEffect, useMemo } from "react";
+import { Group, Mesh, SkinnedMesh } from "three";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls";
 
-export function useTransformOnClick(orbitalControls) {
+export function useTransformOnClick(orbitalControls, loaded: boolean) {
   const { raycaster, gl, camera, scene, invalidate } = useThree();
   const transformControls = useMemo<TransformControls>(
     () => new TransformControls(camera, gl.domElement),
@@ -13,7 +12,7 @@ export function useTransformOnClick(orbitalControls) {
 
   useEffect(() => {
     function handleChange(e) {
-      orbitalControls.current.enabled = !e.value;
+      orbitalControls.enabled = !e.value;
       invalidate();
     }
 
@@ -37,14 +36,16 @@ export function useTransformOnClick(orbitalControls) {
 
       const intersects = raycaster
         .intersectObjects(
-          scene.children.find((child) => child instanceof Group).children
+          scene.children.find((child) => child instanceof Group).children,
+          true
         )
-        // @ts-ignore
-        .filter((child) => child.object?.skeleton?.bones?.length);
+        .filter(
+          (x) => x.object instanceof Mesh && !(x.object instanceof SkinnedMesh)
+        );
 
       if (intersects.length) {
-        const mesh = intersects[0].object;
-        const rootBone = mesh.skeleton.bones[0];
+        const boneMesh = intersects[0].object;
+        const rootBone = boneMesh.parent;
 
         transformControls.attach(rootBone);
       } else {
@@ -54,5 +55,5 @@ export function useTransformOnClick(orbitalControls) {
 
     gl.domElement.addEventListener("click", handleClick);
     return () => gl.domElement.removeEventListener("click", handleClick);
-  }, []);
+  }, [loaded]);
 }

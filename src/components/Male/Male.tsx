@@ -9,7 +9,7 @@ import { draco, TransformControls } from "drei";
 import { Object3D } from "three";
 import * as THREE from "three";
 
-export function Male(props) {
+export const Male = React.memo(function (props: any) {
   // @ts-ignore
   const { nodes, materials } = useLoader(
     GLTFLoader,
@@ -142,4 +142,4 @@ export function Male(props) {
       />
     </group>
   );
-}
+});

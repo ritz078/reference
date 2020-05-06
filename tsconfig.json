@@ -16,7 +16,8 @@
     "baseUrl": "src",
     "paths": {
       "@hooks": ["hooks/*"],
-      "@components": ["components/*"]
+      "@components": ["components/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "exclude": ["node_modules"],
