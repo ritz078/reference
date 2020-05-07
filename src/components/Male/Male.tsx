@@ -20,7 +20,7 @@ export const Male = React.memo(function (props: any) {
   useEffect(props.onLoad, []);
 
   return (
-    <group name="model" {...props} dispose={null}>
+    <group on name="model" {...props} dispose={null}>
       <group position={[0, 101.72, 2.71]}>
         <primitive object={nodes.Pelvis} />
         <primitive object={nodes.Spine_1} />

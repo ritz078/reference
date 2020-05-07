@@ -13,11 +13,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "paths": {
-      "@hooks": ["hooks/*"],
-      "@components": ["components/*"],
-      "@utils/*": ["utils/*"]
+      "@hooks/*": ["./hooks/*"],
+      "@components/*": ["./components/*"],
+      "@utils/*": ["./utils/*"]
     }
   },
   "exclude": ["node_modules"],

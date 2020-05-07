@@ -1,24 +1,15 @@
-import React, {
-  memo,
-  Suspense,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { memo, Suspense, useCallback, useEffect, useMemo } from "react";
 import { Male } from "../Male";
-import { Dom, useFrame, useThree } from "react-three-fiber";
+import { Dom, useThree } from "react-three-fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
 import {
-  Group,
   SkinnedMesh,
   Mesh,
   MeshBasicMaterial,
   SphereBufferGeometry,
 } from "three";
-import { useTransformOnClick } from "../../hooks/useTransformOnClick";
+import { useTransformOnClick } from "@hooks/useTransformOnClick";
 
 function _ModelContainer() {
   const { scene, gl, camera, invalidate } = useThree();
@@ -26,10 +17,17 @@ function _ModelContainer() {
     () => new OrbitControls(camera, gl.domElement),
     []
   );
-  const [isLoaded, setIsLoaded] = useState(false);
+  const boneMeshMaterial = useMemo(
+    () =>
+      new MeshBasicMaterial({
+        color: "red",
+        visible: false,
+        wireframe: true,
+      }),
+    []
+  );
 
-  const transformingSkin = useRef<SkinnedMesh>(null);
-  useTransformOnClick(orbitalControls, isLoaded);
+  useTransformOnClick(orbitalControls);
   // useHighlightOnHover();
 
   useEffect(() => {
@@ -65,17 +63,9 @@ function _ModelContainer() {
     if (DEV) {
       const spotLightHelper = new THREE.SpotLightHelper(spotLight);
       scene.add(spotLightHelper);
-      const spotLightHelperBack = new THREE.SpotLightHelper(spotLight);
+      const spotLightHelperBack = new THREE.SpotLightHelper(spotLightBack);
       scene.add(spotLightHelperBack);
     }
-  }, []);
-
-  useEffect(() => {
-    scene.children
-      .find((child) => child instanceof Group && child.name === "model")
-      ?.children.forEach((object) => {
-        object.addEventListener("click", console.log);
-      });
   }, []);
 
   const onLoad = useCallback(() => {
@@ -86,7 +76,7 @@ function _ModelContainer() {
 
         const mesh = new Mesh(
           new SphereBufferGeometry(8, 20, 20),
-          new MeshBasicMaterial({ color: "red", wireframe: true })
+          boneMeshMaterial
         );
         mesh.name = object.id.toString(10);
         rootBone.add(mesh);
@@ -94,8 +84,6 @@ function _ModelContainer() {
         bbox.setFromObject(rootBone);
       }
     });
-
-    setIsLoaded(true);
   }, []);
 
   return (
@@ -106,7 +94,15 @@ function _ModelContainer() {
         </Dom>
       }
     >
-      <Male onLoad={onLoad} />
+      <Male
+        onPointerOver={() => {
+          boneMeshMaterial.visible = true;
+        }}
+        onPointerOut={() => {
+          boneMeshMaterial.visible = false;
+        }}
+        onLoad={onLoad}
+      />
     </Suspense>
   );
 }

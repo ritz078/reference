@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react";
 import { Group, Mesh, SkinnedMesh } from "three";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls";
 
-export function useTransformOnClick(orbitalControls, loaded: boolean) {
+export function useTransformOnClick(orbitalControls) {
   const { raycaster, gl, camera, scene, invalidate } = useThree();
   const transformControls = useMemo<TransformControls>(
     () => new TransformControls(camera, gl.domElement),
@@ -19,6 +19,7 @@ export function useTransformOnClick(orbitalControls, loaded: boolean) {
     transformControls.addEventListener("dragging-changed", handleChange);
     scene.add(transformControls);
     transformControls.mode = "rotate";
+    transformControls.axis = "local";
 
     return () => {
       transformControls.removeEventListener("dragging-changed", handleChange);
@@ -55,5 +56,5 @@ export function useTransformOnClick(orbitalControls, loaded: boolean) {
 
     gl.domElement.addEventListener("click", handleClick);
     return () => gl.domElement.removeEventListener("click", handleClick);
-  }, [loaded]);
+  }, []);
 }
