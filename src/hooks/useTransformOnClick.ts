@@ -17,9 +17,9 @@ export function useTransformOnClick(orbitalControls) {
     }
 
     transformControls.addEventListener("dragging-changed", handleChange);
-    scene.add(transformControls);
     transformControls.mode = "rotate";
     transformControls.axis = "local";
+    scene.add(transformControls);
 
     return () => {
       transformControls.removeEventListener("dragging-changed", handleChange);
@@ -45,7 +45,7 @@ export function useTransformOnClick(orbitalControls) {
         );
 
       if (intersects.length) {
-        const boneMesh = intersects[0].object;
+        const boneMesh = intersects[0].object as Mesh;
         const rootBone = boneMesh.parent;
 
         transformControls.attach(rootBone);

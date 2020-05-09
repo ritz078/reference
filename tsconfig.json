@@ -17,7 +17,8 @@
     "paths": {
       "@hooks/*": ["./hooks/*"],
       "@components/*": ["./components/*"],
-      "@utils/*": ["./utils/*"]
+      "@utils/*": ["./utils/*"],
+      "@constants/*": ["./constants/*"]
     }
   },
   "exclude": ["node_modules"],

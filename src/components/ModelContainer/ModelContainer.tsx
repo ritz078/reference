@@ -1,6 +1,5 @@
-import React, { memo, Suspense, useCallback, useEffect, useMemo } from "react";
-import { Male } from "../Male";
-import { Dom, useThree } from "react-three-fiber";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { useThree } from "react-three-fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
 import {
@@ -8,48 +7,65 @@ import {
   Mesh,
   MeshBasicMaterial,
   SphereBufferGeometry,
+  MeshStandardMaterial,
 } from "three";
 import { useTransformOnClick } from "@hooks/useTransformOnClick";
+import { useLoader } from "@hooks/useLoader";
+import { MODEL_NAME } from "@constants/name";
+import { getModelCenter } from "@utils/geometry";
 
 function _ModelContainer() {
-  const { scene, gl, camera, invalidate } = useThree();
-  const orbitalControls = useMemo(
-    () => new OrbitControls(camera, gl.domElement),
-    []
-  );
+  const { scene, gl, camera } = useThree();
+
+  const orbitalControls = useMemo(() => {
+    const orbitalControls = new OrbitControls(camera, gl.domElement);
+    orbitalControls.maxDistance = 500;
+    orbitalControls.minDistance = 50;
+    orbitalControls.screenSpacePanning = true;
+    return orbitalControls;
+  }, []);
+
   const boneMeshMaterial = useMemo(
     () =>
       new MeshBasicMaterial({
         color: "red",
-        visible: false,
         wireframe: true,
       }),
     []
   );
+  const [modelName, setModelName] = useState("male");
 
   useTransformOnClick(orbitalControls);
-  // useHighlightOnHover();
 
-  useEffect(() => {
-    orbitalControls.addEventListener("change", invalidate);
-
-    return () => {
-      orbitalControls.removeEventListener("change", invalidate);
-    };
-  }, []);
-
-  useEffect(() => {
-    orbitalControls.target = new THREE.Vector3(0, 100, 0);
+  const reset = useCallback(() => {
+    const model = scene.getObjectByName(MODEL_NAME);
+    orbitalControls.target = getModelCenter(model, modelName);
     orbitalControls.update();
+  }, [scene, orbitalControls, modelName]);
+
+  const onLoad = useCallback(() => {
+    const model = scene.getObjectByName(MODEL_NAME);
+
+    model.traverse((object) => {
+      if (object instanceof SkinnedMesh) {
+        if (object.material instanceof MeshStandardMaterial) {
+          object.material.wireframe = false;
+        }
+
+        const bbox = object.geometry.boundingBox;
+        const rootBone = object.skeleton.bones[0];
+
+        const mesh = new Mesh(new SphereBufferGeometry(2.5), boneMeshMaterial);
+        mesh.name = object.id.toString(10);
+        rootBone.add(mesh);
+
+        bbox.setFromObject(rootBone);
+      }
+    });
+    reset();
   }, []);
 
-  useEffect(() => {
-    const size = 1000;
-    const divisions = 10;
-
-    const gridHelper = new THREE.GridHelper(size, divisions);
-    scene.add(gridHelper);
-  }, []);
+  useLoader(modelName, onLoad);
 
   useEffect(() => {
     const spotLight = new THREE.SpotLight(0xffffff);
@@ -59,52 +75,9 @@ function _ModelContainer() {
     const spotLightBack = new THREE.SpotLight(0xffffff);
     spotLightBack.position.set(50, 50, -300);
     scene.add(spotLightBack);
-
-    if (DEV) {
-      const spotLightHelper = new THREE.SpotLightHelper(spotLight);
-      scene.add(spotLightHelper);
-      const spotLightHelperBack = new THREE.SpotLightHelper(spotLightBack);
-      scene.add(spotLightHelperBack);
-    }
   }, []);
 
-  const onLoad = useCallback(() => {
-    scene.traverse((object) => {
-      if (object instanceof SkinnedMesh) {
-        const bbox = object.geometry.boundingBox;
-        const rootBone = object.skeleton.bones[0];
-
-        const mesh = new Mesh(
-          new SphereBufferGeometry(8, 20, 20),
-          boneMeshMaterial
-        );
-        mesh.name = object.id.toString(10);
-        rootBone.add(mesh);
-
-        bbox.setFromObject(rootBone);
-      }
-    });
-  }, []);
-
-  return (
-    <Suspense
-      fallback={
-        <Dom>
-          <div>loading</div>
-        </Dom>
-      }
-    >
-      <Male
-        onPointerOver={() => {
-          boneMeshMaterial.visible = true;
-        }}
-        onPointerOut={() => {
-          boneMeshMaterial.visible = false;
-        }}
-        onLoad={onLoad}
-      />
-    </Suspense>
-  );
+  return null;
 }
 
 export const ModelContainer = memo(_ModelContainer);
