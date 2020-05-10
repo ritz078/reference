@@ -18,7 +18,8 @@
       "@hooks/*": ["./hooks/*"],
       "@components/*": ["./components/*"],
       "@utils/*": ["./utils/*"],
-      "@constants/*": ["./constants/*"]
+      "@constants/*": ["./constants/*"],
+      "@stores/*": ["./stores/*"]
     }
   },
   "exclude": ["node_modules"],

@@ -31,8 +31,11 @@ export function useTransformOnClick(orbitalControls) {
     function handleClick(ev: MouseEvent) {
       ev.preventDefault();
 
-      const x = (ev.clientX / window.innerWidth) * 2 - 1;
-      const y = -(ev.clientY / window.innerHeight) * 2 + 1;
+      console.log(gl.domElement.width);
+
+      const x = (ev.clientX / gl.domElement.parentElement.clientWidth) * 2 - 1;
+      const y =
+        -(ev.clientY / gl.domElement.parentElement.clientHeight) * 2 + 1;
       raycaster.setFromCamera({ x, y }, camera);
 
       const intersects = raycaster

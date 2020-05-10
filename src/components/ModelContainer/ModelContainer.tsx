@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { useThree } from "react-three-fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
@@ -8,14 +8,33 @@ import {
   MeshBasicMaterial,
   SphereBufferGeometry,
   MeshStandardMaterial,
+  GridHelper,
 } from "three";
 import { useTransformOnClick } from "@hooks/useTransformOnClick";
 import { useLoader } from "@hooks/useLoader";
 import { MODEL_NAME } from "@constants/name";
 import { getModelCenter } from "@utils/geometry";
+import { useLoadedModel } from "@stores/loadedModel";
+import { useEnvironment } from "@stores/environment";
 
 function _ModelContainer() {
   const { scene, gl, camera } = useThree();
+  const gridHelperRef = useRef<GridHelper>(null);
+
+  const modelName = useLoadedModel((state) => state.name);
+  const showGrid = useEnvironment((state) => state.showGrid);
+
+  useEffect(() => {
+    if (gridHelperRef.current) {
+      scene.remove(gridHelperRef.current);
+    }
+
+    if (showGrid) {
+      const gridHelper = new GridHelper(1000, 50);
+      gridHelperRef.current = gridHelper;
+      scene.add(gridHelper);
+    }
+  }, [showGrid]);
 
   const orbitalControls = useMemo(() => {
     const orbitalControls = new OrbitControls(camera, gl.domElement);
@@ -33,7 +52,6 @@ function _ModelContainer() {
       }),
     []
   );
-  const [modelName, setModelName] = useState("male");
 
   useTransformOnClick(orbitalControls);
 
@@ -49,7 +67,7 @@ function _ModelContainer() {
     model.traverse((object) => {
       if (object instanceof SkinnedMesh) {
         if (object.material instanceof MeshStandardMaterial) {
-          object.material.wireframe = false;
+          object.material.wireframe = true;
         }
 
         const bbox = object.geometry.boundingBox;
@@ -64,6 +82,8 @@ function _ModelContainer() {
     });
     reset();
   }, []);
+
+  console.log(modelName);
 
   useLoader(modelName, onLoad);
 

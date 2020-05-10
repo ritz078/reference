@@ -952,6 +952,16 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.1.3.tgz#d7373eb9a1afc371342b8cf1a07e34368f3d65d7"
   integrity sha512-y7qc6SzZBlSpx8hEDfV0S9Cx6goROX/vBhS2Ru1Q78Jp1FlCMbxp7UcAN90rLgB3X8DSMBgDFxcmoG/VfdAhFA==
 
+"@mdi/js@^5.1.45":
+  version "5.1.45"
+  resolved "https://registry.yarnpkg.com/@mdi/js/-/js-5.1.45.tgz#92ac075c7080d29b430bd76ec8dc0536b800f4b0"
+  integrity sha512-44He8VMteUIWE0lIZjAIH/QoxNXbGoeqA1uwzJKwRpiaU6d5n2JjvL+11uH5nQQTJtU1nQFdKpB/j5S6rM3jtQ==
+
+"@mdi/react@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@mdi/react/-/react-1.4.0.tgz#7f6bad1bd8801226d0e5bad91659b215ce68a93f"
+  integrity sha512-OUH9RhfDJPhybQL3owwrSDIXz2yVKXg5lYeOZjyRCiT9wqywNK0FeYyDByOwNIZnnIQoQYmuSrMv+pOX0Uqkmw==
+
 "@next/react-refresh-utils@9.3.6":
   version "9.3.6"
   resolved "https://registry.yarnpkg.com/@next/react-refresh-utils/-/react-refresh-utils-9.3.6.tgz#a5eb91b4b8270fecb5fcf2d1319d8d04f0cf6f75"
@@ -2415,10 +2425,10 @@ dot-prop@^5.2.0:
   dependencies:
     is-obj "^2.0.0"
 
-drei@^0.0.29:
-  version "0.0.29"
-  resolved "https://registry.yarnpkg.com/drei/-/drei-0.0.29.tgz#4bcd344b8509d4d7349be7e4db3e2228e580be29"
-  integrity sha512-sWzjdlO8VLVmCONM167gf20onraOgrrs5lZLvYvxuGle8r9SY8N5dV9VcL/tF9bdVRqA+Ziq3V8+XHfITAfjDg==
+drei@^0.0.32:
+  version "0.0.32"
+  resolved "https://registry.yarnpkg.com/drei/-/drei-0.0.32.tgz#1d3a1a94a3dc05f256390377046189bcdb67d5ef"
+  integrity sha512-QBmQHNQh6kKJR2f6xswxmvhGDOUGOAFhw1+F40o/6WA+6XrEGOFKuko/cKaxsCsAXGS/cAmgUc+3WmXgaqejew==
   dependencies:
     "@babel/runtime" "^7.9.2"
     postprocessing "^6.13.3"
@@ -3470,11 +3480,6 @@ klaw-sync@^6.0.0:
   integrity sha512-nIeuVSzdCCs6TDPTqI8w1Yre34sSq7AkZ4B3sfOBbI2CgVSB4Du4aLQijFU2+lhAFCwt9+42Hel6lQNIv6AntQ==
   dependencies:
     graceful-fs "^4.1.11"
-
-lerp@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/lerp/-/lerp-1.0.3.tgz#a18c8968f917896de15ccfcc28d55a6b731e776e"
-  integrity sha1-oYyJaPkXiW3hXM/MKNVaa3Med24=
 
 lines-and-columns@^1.1.6:
   version "1.1.6"
@@ -4860,13 +4865,6 @@ react-promise-suspense@^0.3.2:
   dependencies:
     fast-deep-equal "^2.0.1"
 
-react-promise-suspense@^0.3.3:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/react-promise-suspense/-/react-promise-suspense-0.3.3.tgz#b085c7e0ac22b85fd3d605b1c4f181cda4310bc9"
-  integrity sha512-OdehKsCEWYoV6pMcwxbvJH99UrbXylmXJ1QpEL9OfHaUBzcAihyfSJV8jFq325M/wW9iKc/BoiLROXxMul+MxA==
-  dependencies:
-    fast-deep-equal "^2.0.1"
-
 react-reconciler@0.25.1:
   version "0.25.1"
   resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.25.1.tgz#f9814d59d115e1210762287ce987801529363aaa"
@@ -4896,10 +4894,10 @@ react-spring@next:
     "@react-spring/web" "^9.0.0-beta.34"
     "@react-spring/zdog" "^9.0.0-beta.33"
 
-react-three-fiber@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/react-three-fiber/-/react-three-fiber-4.1.4.tgz#55ea847f6aa7bd88eea077c1212151343be94427"
-  integrity sha512-c1NchqRPAP27GQchSKkpRgz+XwwPvRJo/cTjPWQmX0H2MqnIu4vBTV1GKBqn+uWeDHjjfcWHZyq8zH5JccP+NA==
+react-three-fiber@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/react-three-fiber/-/react-three-fiber-4.2.3.tgz#34252df99a60afb1da133a6e0b6109cf3e6811b7"
+  integrity sha512-UzPF4a7SwMdn3jH6xtNLK/P4MRecCnJ51mKTNtppLRefj/s6iuoP5S95LhIXgpNwt7UgYMim7woCfwzhebavaA==
   dependencies:
     "@babel/runtime" "^7.9.2"
     "@juggle/resize-observer" "^3.1.3"
@@ -6094,3 +6092,8 @@ yaml@^1.7.2:
   integrity sha512-HPT7cGGI0DuRcsO51qC1j9O16Dh1mZ2bnXwsi0jrSpsLz0WxOLSLXfkABVl6bZO629py3CU+OMJtpNHDLB97kg==
   dependencies:
     "@babel/runtime" "^7.9.2"
+
+zustand@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-2.2.3.tgz#07ee668bf600a5e0dcff8f8b60f35faa149f65d5"
+  integrity sha512-SSd5DzbwUN0b8ePW4I+8mSdXQc6UOqTgYzlMtoNvf7pogmFoXjeE0wZwCVopoZBnzz/uRBD2dsozzM2FXDQcXw==

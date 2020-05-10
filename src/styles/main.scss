@@ -1,8 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap");
+
 * {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
 }
 
 html,
@@ -10,10 +13,17 @@ body {
   overflow: hidden;
   width: 100vw;
   height: 100vh;
+  background-image: radial-gradient(#616161, #000000);
 }
 
 .container {
+  display: flex;
+  flex: 1;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
   width: 100vw;
   height: 100vh;
-  background-image: radial-gradient(#616161, #000000);
 }

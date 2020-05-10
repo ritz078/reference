@@ -1,0 +1,35 @@
+.settings {
+  background-color: #444444;
+  width: 350px;
+  border-radius: 2px;
+  padding: 20px;
+}
+
+.gender {
+  display: flex;
+  flex-direction: row;
+}
+
+.iconButton {
+  display: flex;
+  flex-direction: row;
+  color: #ffffff;
+  padding: 5px;
+  background-color: #ffffff26;
+  border-radius: 2px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 200ms;
+  border: 1px solid transparent;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.separator {
+  margin: 10px 0;
+  height: 1px;
+  width: 100%;
+  background-color: #717171;
+}

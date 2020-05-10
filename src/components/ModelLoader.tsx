@@ -8,17 +8,15 @@ const cameraProps = {
 
 export default function () {
   return (
-    <>
-      <Canvas
-        shadowMap
-        invalidateFrameloop={false}
-        camera={cameraProps as any}
-        pixelRatio={window.devicePixelRatio}
-      >
-        <ambientLight intensity={1} />
+    <Canvas
+      shadowMap
+      invalidateFrameloop={false}
+      camera={cameraProps as any}
+      pixelRatio={window.devicePixelRatio}
+    >
+      <ambientLight intensity={1} />
 
-        <ModelContainer />
-      </Canvas>
-    </>
+      <ModelContainer />
+    </Canvas>
   );
 }
