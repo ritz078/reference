@@ -2,6 +2,8 @@ import { useThree } from "react-three-fiber";
 import { useEffect, useMemo } from "react";
 import { Group, Mesh, SkinnedMesh } from "three";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls";
+import { convertPointerToCoordinate } from "@utils/convertPointerToCoordinate";
+import { useMaterial } from "@stores/material";
 
 export function useTransformOnClick(orbitalControls) {
   const { raycaster, gl, camera, scene, invalidate } = useThree();
@@ -9,6 +11,7 @@ export function useTransformOnClick(orbitalControls) {
     () => new TransformControls(camera, gl.domElement),
     []
   );
+  const { wireframe, toggleWireframe } = useMaterial();
 
   useEffect(() => {
     function handleChange(e) {
@@ -31,12 +34,10 @@ export function useTransformOnClick(orbitalControls) {
     function handleClick(ev: MouseEvent) {
       ev.preventDefault();
 
-      console.log(gl.domElement.width);
-
-      const x = (ev.clientX / gl.domElement.parentElement.clientWidth) * 2 - 1;
-      const y =
-        -(ev.clientY / gl.domElement.parentElement.clientHeight) * 2 + 1;
-      raycaster.setFromCamera({ x, y }, camera);
+      raycaster.setFromCamera(
+        convertPointerToCoordinate(ev, gl.domElement),
+        camera
+      );
 
       const intersects = raycaster
         .intersectObjects(
@@ -48,6 +49,8 @@ export function useTransformOnClick(orbitalControls) {
         );
 
       if (intersects.length) {
+        if (!wireframe) toggleWireframe();
+
         const boneMesh = intersects[0].object as Mesh;
         const rootBone = boneMesh.parent;
 
@@ -59,5 +62,5 @@ export function useTransformOnClick(orbitalControls) {
 
     gl.domElement.addEventListener("click", handleClick);
     return () => gl.domElement.removeEventListener("click", handleClick);
-  }, []);
+  }, [wireframe]);
 }

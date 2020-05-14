@@ -1,12 +1,16 @@
 import React from "react";
 import { Canvas } from "react-three-fiber";
+import { Sky } from "drei";
 import { ModelContainer } from "./ModelContainer";
+import { useEnvironment } from "@stores/environment";
 
 const cameraProps = {
-  position: [10, 100, 160],
+  position: [100, 120, 200],
 };
 
 export default function () {
+  const showSky = useEnvironment((state) => state.showSky);
+
   return (
     <Canvas
       shadowMap
@@ -15,6 +19,8 @@ export default function () {
       pixelRatio={window.devicePixelRatio}
     >
       <ambientLight intensity={1} />
+
+      {showSky && <Sky />}
 
       <ModelContainer />
     </Canvas>

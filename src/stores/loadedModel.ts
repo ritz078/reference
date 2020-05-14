@@ -1,6 +1,11 @@
 import create from "zustand";
 
-const [useLoadedModel] = create((set) => ({
+interface ILoadedModel {
+  name: string;
+  setName: (name: string) => void;
+}
+
+const [useLoadedModel] = create<ILoadedModel>((set) => ({
   name: "male",
   setName: (name: string) =>
     set({

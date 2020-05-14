@@ -9,6 +9,7 @@ import {
   SphereBufferGeometry,
   MeshStandardMaterial,
   GridHelper,
+  Color,
 } from "three";
 import { useTransformOnClick } from "@hooks/useTransformOnClick";
 import { useLoader } from "@hooks/useLoader";
@@ -16,6 +17,7 @@ import { MODEL_NAME } from "@constants/name";
 import { getModelCenter } from "@utils/geometry";
 import { useLoadedModel } from "@stores/loadedModel";
 import { useEnvironment } from "@stores/environment";
+import { useMaterial } from "@stores/material";
 
 function _ModelContainer() {
   const { scene, gl, camera } = useThree();
@@ -23,6 +25,7 @@ function _ModelContainer() {
 
   const modelName = useLoadedModel((state) => state.name);
   const showGrid = useEnvironment((state) => state.showGrid);
+  const { wireframe, materialColor } = useMaterial();
 
   useEffect(() => {
     if (gridHelperRef.current) {
@@ -55,6 +58,30 @@ function _ModelContainer() {
 
   useTransformOnClick(orbitalControls);
 
+  useEffect(() => {
+    const model = scene.getObjectByName(MODEL_NAME);
+
+    model?.traverse((object) => {
+      if (object instanceof SkinnedMesh) {
+        if (object.material instanceof MeshStandardMaterial) {
+          object.material.wireframe = wireframe;
+        }
+      }
+    });
+  }, [wireframe]);
+
+  useEffect(() => {
+    const model = scene.getObjectByName(MODEL_NAME);
+
+    model?.traverse((object) => {
+      if (object instanceof SkinnedMesh) {
+        if (object.material instanceof MeshStandardMaterial) {
+          object.material.color = new Color(materialColor);
+        }
+      }
+    });
+  }, [materialColor]);
+
   const reset = useCallback(() => {
     const model = scene.getObjectByName(MODEL_NAME);
     orbitalControls.target = getModelCenter(model, modelName);
@@ -67,7 +94,7 @@ function _ModelContainer() {
     model.traverse((object) => {
       if (object instanceof SkinnedMesh) {
         if (object.material instanceof MeshStandardMaterial) {
-          object.material.wireframe = true;
+          object.material.wireframe = wireframe;
         }
 
         const bbox = object.geometry.boundingBox;
@@ -81,18 +108,16 @@ function _ModelContainer() {
       }
     });
     reset();
-  }, []);
-
-  console.log(modelName);
+  }, [wireframe]);
 
   useLoader(modelName, onLoad);
 
   useEffect(() => {
-    const spotLight = new THREE.SpotLight(0xffffff);
+    const spotLight = new THREE.SpotLight(0xffffff, 0.7);
     spotLight.position.set(50, 50, 300);
     scene.add(spotLight);
 
-    const spotLightBack = new THREE.SpotLight(0xffffff);
+    const spotLightBack = new THREE.SpotLight(0xffffff, 0.7);
     spotLightBack.position.set(50, 50, -300);
     scene.add(spotLightBack);
   }, []);

@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Settings.module.scss";
 import Icon from "@mdi/react";
-import { mdiGrid, mdiHumanFemale, mdiHumanMale } from "@mdi/js";
+import { mdiHumanFemale, mdiHumanMale } from "@mdi/js";
 import { IconProps } from "@mdi/react/dist/IconProps";
 import { useLoadedModel } from "@stores/loadedModel";
 import { useEnvironment } from "@stores/environment";
+import Switch from "react-switch";
+import { useMaterial } from "@stores/material";
+import { ChromePicker } from "react-color";
 
 interface IconButtonProps extends IconProps {
   label?: string;
   onClick?: () => void;
+}
+
+function SwitchButton({ label, checked, onChange }) {
+  return (
+    <div className={styles.switchWrapper} onClick={onChange}>
+      {label}
+      <Switch
+        checked={checked}
+        uncheckedIcon={false}
+        checkedIcon={false}
+        onChange={() => {}}
+        height={10}
+        width={26}
+        handleDiameter={16}
+      />
+    </div>
+  );
 }
 
 export function IconButton({
@@ -27,7 +47,13 @@ export function IconButton({
 
 export function Settings() {
   const { setName: setModelName, name } = useLoadedModel();
-  const { showGrid, toggleGrid } = useEnvironment();
+  const { showGrid, toggleGrid, showSky, toggleSky } = useEnvironment();
+  const {
+    wireframe,
+    toggleWireframe,
+    materialColor,
+    setMaterialColor,
+  } = useMaterial();
 
   return (
     <div className={styles.settings}>
@@ -43,9 +69,56 @@ export function Settings() {
           path={mdiHumanFemale}
         />
       </div>
-      <div className={styles.separator} />
-      <div className={styles.gender}>
-        <IconButton onClick={toggleGrid} title="Grid" path={mdiGrid} />
+      <div className={styles.title}>Material</div>
+      <SwitchButton
+        checked={wireframe}
+        onChange={toggleWireframe}
+        label="Wireframe"
+      />
+
+      <ColorPicker color={materialColor} onChange={setMaterialColor} />
+      <div className={styles.title}>Environment</div>
+      <SwitchButton
+        checked={showGrid}
+        onChange={toggleGrid}
+        label="Plane Grid"
+      />
+
+      <SwitchButton checked={showSky} onChange={toggleSky} label="Sky" />
+    </div>
+  );
+}
+
+function ColorPicker({ color, onChange }) {
+  const [show, setShow] = useState(false);
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (!divRef.current.contains(e.target as Node)) {
+        setShow(false);
+      }
+    }
+
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, []);
+
+  return (
+    <div className={styles.switchWrapper} onClick={() => {}}>
+      Color
+      <div className={styles.colorWrapper} ref={divRef}>
+        <div
+          className={styles.colorSwatch}
+          style={{
+            backgroundColor: color,
+          }}
+          onClick={() => setShow(!show)}
+        />
+
+        <div className={styles.colorModal}>
+          {show && <ChromePicker color={color} onChange={onChange} />}
+        </div>
       </div>
     </div>
   );

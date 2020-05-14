@@ -1,13 +1,14 @@
 .settings {
-  background-color: #444444;
-  width: 350px;
+  background-color: rgba(255, 255, 255, 0.05);
+  width: 300px;
   border-radius: 2px;
-  padding: 20px;
 }
 
 .gender {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  padding: 20px 0;
 }
 
 .iconButton {
@@ -15,7 +16,7 @@
   flex-direction: row;
   color: #ffffff;
   padding: 5px;
-  background-color: #ffffff26;
+  background-color: #ffffff12;
   border-radius: 2px;
   margin-right: 10px;
   cursor: pointer;
@@ -31,5 +32,41 @@
   margin: 10px 0;
   height: 1px;
   width: 100%;
-  background-color: #717171;
+  background-color: #333333;
+}
+
+.title {
+  font-size: 14px;
+  color: #ffffff;
+  background-color: #ffffff1f;
+  padding: 6px 20px;
+}
+
+.switchWrapper {
+  display: flex;
+  flex-direction: row;
+  color: rgba(255, 255, 255, 0.75);
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 10px 0;
+  margin: 0 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  cursor: pointer;
+}
+
+.colorModal {
+  position: absolute;
+  z-index: 9;
+  margin-top: 5px;
+  transform: translateX(-204px);
+}
+
+.colorSwatch {
+  height: 20px;
+  width: 20px;
+  border-radius: 2px;
+}
+
+.colorWrapper {
+  position: relative;
 }

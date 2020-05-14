@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useThree } from "react-three-fiber";
-import { MODEL_NAME } from "../constants/name";
+import { MODEL_NAME } from "@constants/name";
 
 export function useLoader(path: string, onLoad: () => void) {
   const { scene } = useThree();
@@ -15,17 +15,14 @@ export function useLoader(path: string, onLoad: () => void) {
     return loader;
   }, []);
 
-  const loadedScene = useRef(null);
-
   useEffect(() => {
     if (!path) return;
 
-    if (loadedScene.current) {
-      scene.remove(loadedScene.current);
+    if (scene.getObjectByName(MODEL_NAME)) {
+      scene.remove(scene.getObjectByName(MODEL_NAME));
     }
     loader.load(`/models/${path}.glb`, (gltf) => {
       scene.add(gltf.scene);
-      loadedScene.current = gltf.scene;
       gltf.scene.name = MODEL_NAME;
 
       onLoad();
