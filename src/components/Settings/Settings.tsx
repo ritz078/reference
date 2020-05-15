@@ -47,7 +47,7 @@ export function IconButton({
 
 export function Settings() {
   const { setName: setModelName, name } = useLoadedModel();
-  const { showGrid, toggleGrid, showSky, toggleSky } = useEnvironment();
+  const { showGrid, toggleGrid } = useEnvironment();
   const {
     wireframe,
     toggleWireframe,
@@ -69,7 +69,7 @@ export function Settings() {
           path={mdiHumanFemale}
         />
       </div>
-      <div className={styles.title}>Material</div>
+      <div className={styles.title}>Model Material</div>
       <SwitchButton
         checked={wireframe}
         onChange={toggleWireframe}
@@ -78,13 +78,9 @@ export function Settings() {
 
       <ColorPicker color={materialColor} onChange={setMaterialColor} />
       <div className={styles.title}>Environment</div>
-      <SwitchButton
-        checked={showGrid}
-        onChange={toggleGrid}
-        label="Plane Grid"
-      />
-
-      <SwitchButton checked={showSky} onChange={toggleSky} label="Sky" />
+      <SwitchButton checked={showGrid} onChange={toggleGrid} label="Grid" />
+      <div className={styles.title}>Post Processing</div>
+      <SwitchButton checked={showGrid} onChange={toggleGrid} label="Grid" />
     </div>
   );
 }
@@ -97,6 +93,9 @@ function ColorPicker({ color, onChange }) {
     function handleClick(e: MouseEvent) {
       if (!divRef.current.contains(e.target as Node)) {
         setShow(false);
+      } else {
+        e.preventDefault();
+        e.stopPropagation();
       }
     }
 

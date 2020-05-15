@@ -24,7 +24,7 @@ function _ModelContainer() {
   const gridHelperRef = useRef<GridHelper>(null);
 
   const modelName = useLoadedModel((state) => state.name);
-  const showGrid = useEnvironment((state) => state.showGrid);
+  const { showGrid } = useEnvironment();
   const { wireframe, materialColor } = useMaterial();
 
   useEffect(() => {
