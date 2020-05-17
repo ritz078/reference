@@ -1,5 +1,5 @@
 .settings {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: #313131;
   width: 270px;
   border-radius: 2px;
   display: flex;
@@ -15,20 +15,26 @@
 }
 
 .iconButton {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   color: #ffffff;
   padding: 5px;
   background-color: #ffffff12;
   border-radius: 2px;
-  margin-right: 10px;
+  margin: 0 10px;
   cursor: pointer;
   transition: all 200ms;
   border: 1px solid transparent;
+  font-size: 14px;
+  align-items: center;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
   }
+}
+
+.iconLabel {
+  margin: 2px 5px;
 }
 
 .separator {

@@ -1,26 +1,28 @@
 import React from "react";
 import { Canvas } from "react-three-fiber";
-import { Sky } from "drei";
 import { ModelContainer } from "./ModelContainer";
-import { useEnvironment } from "@stores/environment";
 
 const cameraProps = {
   position: [100, 120, 200],
 };
 
-export default function () {
-  const showSky = useEnvironment((state) => state.showSky);
+const webRendererOptions = {
+  // This is needed if you want to get the image
+  // from the canvas.
+  // https://stackoverflow.com/a/15563621/3366126
+  preserveDrawingBuffer: true,
+};
 
+export default function () {
   return (
     <Canvas
       shadowMap
       invalidateFrameloop={false}
       camera={cameraProps as any}
       pixelRatio={window.devicePixelRatio}
+      gl={webRendererOptions}
     >
       <ambientLight intensity={1} />
-
-      {showSky && <Sky />}
 
       <ModelContainer />
     </Canvas>

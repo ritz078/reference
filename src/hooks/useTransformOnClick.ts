@@ -48,12 +48,6 @@ export function useTransformOnClick(orbitalControls) {
         true
       );
 
-      console.log(scene.getObjectByName(MODEL_NAME));
-
-      if (intersects.length) {
-        if (!wireframe) toggleWireframe();
-      }
-
       const intersectedBoneMesh = intersects.filter(
         (x) => x.object instanceof Mesh && !(x.object instanceof SkinnedMesh)
       );

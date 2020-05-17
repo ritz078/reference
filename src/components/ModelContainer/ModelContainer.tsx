@@ -1,7 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { useThree } from "react-three-fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import * as THREE from "three";
 import {
   SkinnedMesh,
   Mesh,
@@ -10,16 +9,17 @@ import {
   MeshStandardMaterial,
   GridHelper,
   Color,
+  SpotLight,
 } from "three";
 import { useTransformOnClick } from "@hooks/useTransformOnClick";
 import { useLoader } from "@hooks/useLoader";
 import { MODEL_NAME } from "@constants/name";
 import { getModelCenter } from "@utils/geometry";
-import { useLoadedModel } from "@stores/loadedModel";
 import { useEnvironment } from "@stores/environment";
 import { useMaterial } from "@stores/material";
 import { useSobelRenderPass } from "@hooks/useSobelRenderPass";
 import { useMode } from "@stores/mode";
+import { useScene } from "@stores/scene";
 
 function _ModelContainer() {
   const { scene, gl, camera } = useThree();
@@ -33,7 +33,7 @@ function _ModelContainer() {
     []
   );
 
-  const modelName = useLoadedModel((state) => state.name);
+  const { model: modelName, setRenderer } = useScene();
   const { showGrid } = useEnvironment();
   const { materialColor } = useMaterial();
   const editMode = useMode((state) => state.editMode);
@@ -118,13 +118,15 @@ function _ModelContainer() {
   useLoader(modelName, onLoad);
 
   useEffect(() => {
-    const spotLight = new THREE.SpotLight(0xffffff, 0.7);
+    const spotLight = new SpotLight(0xffffff, 0.7);
     spotLight.position.set(50, 50, 300);
     scene.add(spotLight);
 
-    const spotLightBack = new THREE.SpotLight(0xffffff, 0.7);
+    const spotLightBack = new SpotLight(0xffffff, 0.7);
     spotLightBack.position.set(50, 50, -300);
     scene.add(spotLightBack);
+
+    setRenderer(gl);
   }, []);
 
   return null;
