@@ -1,9 +1,11 @@
 import { useThree } from "react-three-fiber";
 import { useEffect, useMemo } from "react";
-import { Group, Mesh, SkinnedMesh } from "three";
+import { Mesh, SkinnedMesh } from "three";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls";
 import { convertPointerToCoordinate } from "@utils/convertPointerToCoordinate";
 import { useMaterial } from "@stores/material";
+import { usePostProcessing } from "@stores/postProcessing";
+import { MODEL_NAME } from "@constants/name";
 
 export function useTransformOnClick(orbitalControls) {
   const { raycaster, gl, camera, scene, invalidate } = useThree();
@@ -12,6 +14,7 @@ export function useTransformOnClick(orbitalControls) {
     []
   );
   const { wireframe, toggleWireframe } = useMaterial();
+  const sobelRenderPass = usePostProcessing((state) => state.sobelRenderPass);
 
   useEffect(() => {
     function handleChange(e) {
@@ -32,6 +35,7 @@ export function useTransformOnClick(orbitalControls) {
 
   useEffect(() => {
     function handleClick(ev: MouseEvent) {
+      if (sobelRenderPass) return;
       ev.preventDefault();
 
       raycaster.setFromCamera(
@@ -39,19 +43,23 @@ export function useTransformOnClick(orbitalControls) {
         camera
       );
 
-      const intersects = raycaster
-        .intersectObjects(
-          scene.children.find((child) => child instanceof Group).children,
-          true
-        )
-        .filter(
-          (x) => x.object instanceof Mesh && !(x.object instanceof SkinnedMesh)
-        );
+      const intersects = raycaster.intersectObject(
+        scene.getObjectByName(MODEL_NAME),
+        true
+      );
+
+      console.log(scene.getObjectByName(MODEL_NAME));
 
       if (intersects.length) {
         if (!wireframe) toggleWireframe();
+      }
 
-        const boneMesh = intersects[0].object as Mesh;
+      const intersectedBoneMesh = intersects.filter(
+        (x) => x.object instanceof Mesh && !(x.object instanceof SkinnedMesh)
+      );
+
+      if (intersectedBoneMesh.length) {
+        const boneMesh = intersectedBoneMesh[0].object as Mesh;
         const rootBone = boneMesh.parent;
 
         transformControls.attach(rootBone);
@@ -62,5 +70,5 @@ export function useTransformOnClick(orbitalControls) {
 
     gl.domElement.addEventListener("click", handleClick);
     return () => gl.domElement.removeEventListener("click", handleClick);
-  }, [wireframe]);
+  }, [wireframe, sobelRenderPass]);
 }

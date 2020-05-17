@@ -18,14 +18,25 @@ import { getModelCenter } from "@utils/geometry";
 import { useLoadedModel } from "@stores/loadedModel";
 import { useEnvironment } from "@stores/environment";
 import { useMaterial } from "@stores/material";
+import { useSobelRenderPass } from "@hooks/useSobelRenderPass";
+import { useMode } from "@stores/mode";
 
 function _ModelContainer() {
   const { scene, gl, camera } = useThree();
   const gridHelperRef = useRef<GridHelper>(null);
+  const boneMeshMaterial = useMemo(
+    () =>
+      new MeshBasicMaterial({
+        color: "red",
+        wireframe: true,
+      }),
+    []
+  );
 
   const modelName = useLoadedModel((state) => state.name);
   const { showGrid } = useEnvironment();
-  const { wireframe, materialColor } = useMaterial();
+  const { materialColor } = useMaterial();
+  const editMode = useMode((state) => state.editMode);
 
   useEffect(() => {
     if (gridHelperRef.current) {
@@ -47,16 +58,8 @@ function _ModelContainer() {
     return orbitalControls;
   }, []);
 
-  const boneMeshMaterial = useMemo(
-    () =>
-      new MeshBasicMaterial({
-        color: "red",
-        wireframe: true,
-      }),
-    []
-  );
-
   useTransformOnClick(orbitalControls);
+  useSobelRenderPass();
 
   useEffect(() => {
     const model = scene.getObjectByName(MODEL_NAME);
@@ -64,11 +67,13 @@ function _ModelContainer() {
     model?.traverse((object) => {
       if (object instanceof SkinnedMesh) {
         if (object.material instanceof MeshStandardMaterial) {
-          object.material.wireframe = wireframe;
+          object.material.wireframe = editMode;
         }
       }
     });
-  }, [wireframe]);
+
+    boneMeshMaterial.visible = editMode;
+  }, [editMode]);
 
   useEffect(() => {
     const model = scene.getObjectByName(MODEL_NAME);
@@ -94,7 +99,7 @@ function _ModelContainer() {
     model.traverse((object) => {
       if (object instanceof SkinnedMesh) {
         if (object.material instanceof MeshStandardMaterial) {
-          object.material.wireframe = wireframe;
+          object.material.wireframe = editMode;
         }
 
         const bbox = object.geometry.boundingBox;
@@ -108,7 +113,7 @@ function _ModelContainer() {
       }
     });
     reset();
-  }, [wireframe]);
+  }, [editMode]);
 
   useLoader(modelName, onLoad);
 
