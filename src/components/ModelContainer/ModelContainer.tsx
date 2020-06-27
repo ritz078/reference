@@ -54,7 +54,7 @@ function _ModelContainer() {
     const orbitalControls = new OrbitControls(camera, gl.domElement);
     orbitalControls.maxDistance = 500;
     orbitalControls.minDistance = 50;
-    orbitalControls.screenSpacePanning = true;
+    orbitalControls.screenSpacePanning = false;
     return orbitalControls;
   }, []);
 

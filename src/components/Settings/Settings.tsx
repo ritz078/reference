@@ -1,14 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./Settings.module.scss";
 import Icon from "@mdi/react";
-import {
-  mdiClipboard,
-  mdiContentCopy,
-  mdiDownload,
-  mdiExport,
-  mdiHumanFemale,
-  mdiHumanMale,
-} from "@mdi/js";
+import { mdiDownload, mdiHumanFemale, mdiHumanMale } from "@mdi/js";
 import { IconProps } from "@mdi/react/dist/IconProps";
 import { useEnvironment } from "@stores/environment";
 import Switch from "react-switch";
@@ -94,7 +87,11 @@ export function Settings() {
         label={"Edit"}
       />
 
-      <SwitchButton checked={showGrid} onChange={toggleGrid} label="Grid" />
+      <SwitchButton
+        checked={showGrid}
+        onChange={toggleGrid}
+        label="Floor Grid"
+      />
       <SwitchButton
         checked={sobelRenderPass}
         onChange={_toggleSobelRenderPass}

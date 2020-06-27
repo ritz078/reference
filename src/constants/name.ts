@@ -1,3 +1,3 @@
-import { name } from "../../package.json";
+import { name, version } from "../../package.json";
 
-export const MODEL_NAME = `${name}`;
+export const MODEL_NAME = `${name}-${version}`;

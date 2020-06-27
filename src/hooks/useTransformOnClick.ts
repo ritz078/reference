@@ -3,7 +3,6 @@ import { useEffect, useMemo } from "react";
 import { Mesh, SkinnedMesh } from "three";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls";
 import { convertPointerToCoordinate } from "@utils/convertPointerToCoordinate";
-import { useMaterial } from "@stores/material";
 import { usePostProcessing } from "@stores/postProcessing";
 import { MODEL_NAME } from "@constants/name";
 
@@ -13,7 +12,6 @@ export function useTransformOnClick(orbitalControls) {
     () => new TransformControls(camera, gl.domElement),
     []
   );
-  const { wireframe, toggleWireframe } = useMaterial();
   const sobelRenderPass = usePostProcessing((state) => state.sobelRenderPass);
 
   useEffect(() => {
@@ -64,5 +62,5 @@ export function useTransformOnClick(orbitalControls) {
 
     gl.domElement.addEventListener("click", handleClick);
     return () => gl.domElement.removeEventListener("click", handleClick);
-  }, [wireframe, sobelRenderPass]);
+  }, [sobelRenderPass]);
 }

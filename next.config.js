@@ -11,9 +11,4 @@ module.exports = withTM({
 
     return config;
   },
-
-  experimental: {
-    jsConfigPath: true,
-    fastRefresh: true,
-  },
 });

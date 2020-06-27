@@ -1,4 +1,4 @@
-const SIDEBAR_WIDTH = 270;
+const SIDEBAR_WIDTH = 290;
 
 export function convertPointerToCoordinate(
   event: MouseEvent,
