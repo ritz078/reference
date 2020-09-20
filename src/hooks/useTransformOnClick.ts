@@ -7,7 +7,7 @@ import { usePostProcessing } from "@stores/postProcessing";
 import { MODEL_NAME } from "@constants/name";
 
 export function useTransformOnClick(orbitalControls) {
-  const { raycaster, gl, camera, scene, invalidate } = useThree();
+  const { raycaster, gl, camera, scene } = useThree();
   const transformControls = useMemo<TransformControls>(
     () => new TransformControls(camera, gl.domElement),
     []
@@ -17,7 +17,6 @@ export function useTransformOnClick(orbitalControls) {
   useEffect(() => {
     function handleChange(e) {
       orbitalControls.enabled = !e.value;
-      invalidate();
     }
 
     transformControls.addEventListener("dragging-changed", handleChange);
@@ -29,7 +28,7 @@ export function useTransformOnClick(orbitalControls) {
       transformControls.removeEventListener("dragging-changed", handleChange);
       transformControls.dispose();
     };
-  }, []);
+  }, [transformControls]);
 
   useEffect(() => {
     function handleClick(ev: MouseEvent) {
@@ -55,12 +54,19 @@ export function useTransformOnClick(orbitalControls) {
         const rootBone = boneMesh.parent;
 
         transformControls.attach(rootBone);
-      } else {
+      }
+      // checking if orbitalControls is enabled tells us whether the uer clicked
+      // somewhere on the canvas or if it's just the pointerup event that is triggered when
+      // we stop the dragging of transformControls. We detach the transformControl only if
+      // the user has clicked somewhere else in the canvas.
+      else if (orbitalControls.enabled) {
         transformControls.detach();
       }
     }
 
-    gl.domElement.addEventListener("click", handleClick);
-    return () => gl.domElement.removeEventListener("click", handleClick);
-  }, [sobelRenderPass]);
+    gl.domElement.addEventListener("pointerup", handleClick);
+    return () => {
+      gl.domElement.addEventListener("pointerup", handleClick);
+    };
+  }, [sobelRenderPass, orbitalControls]);
 }

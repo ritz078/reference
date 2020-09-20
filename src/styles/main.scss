@@ -33,6 +33,10 @@ body {
   width: 100vw;
   height: 100vh;
   flex: 1;
+
+  @media screen and (max-width: 620px) {
+    flex-direction: column-reverse;
+  }
 }
 
 .chrome-picker {

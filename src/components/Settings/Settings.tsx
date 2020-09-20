@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./Settings.module.scss";
 import Icon from "@mdi/react";
-import { mdiHumanFemale, mdiHumanMale } from "@mdi/js";
+import { mdiDownload, mdiHumanFemale, mdiHumanMale } from "@mdi/js";
 import { IconProps } from "@mdi/react/dist/IconProps";
 import { useEnvironment } from "@stores/environment";
 import Switch from "react-switch";
@@ -55,50 +55,61 @@ export function Settings() {
       <div className={styles.name} />
       <div className={styles.settingContent}>
         <div className={styles.gender}>
-          <IconButton
-            title="Male"
-            onClick={() => setModel("male")}
-            path={mdiHumanMale}
-            selected={model === "male"}
-          />
-          <IconButton
-            title="Female"
-            onClick={() => setModel("female")}
-            path={mdiHumanFemale}
-            selected={model === "female"}
-          />
+          <div>
+            <IconButton
+              title="Male"
+              onClick={() => setModel("male")}
+              path={mdiHumanMale}
+              selected={model === "male"}
+            />
+            <IconButton
+              title="Female"
+              onClick={() => setModel("female")}
+              path={mdiHumanFemale}
+              selected={model === "female"}
+            />
+          </div>
+
+          <div className={styles.downloadMobile}>
+            <IconButton
+              title="Download"
+              onClick={download}
+              path={mdiDownload}
+            />
+          </div>
         </div>
 
         <div className={styles.separator} />
 
-        <SwitchButton
-          onChange={() => {
-            if (sobelRenderPass) {
-              toggleSobelRenderPass();
-            }
-            toggleEditMode();
-          }}
-          checked={editMode}
-          label={"Edit"}
-        />
+        <div className={styles.switchWrapperContainer}>
+          <SwitchButton
+            onChange={() => {
+              if (sobelRenderPass) {
+                toggleSobelRenderPass();
+              }
+              toggleEditMode();
+            }}
+            checked={editMode}
+            label={"Edit"}
+          />
 
-        <SwitchButton
-          checked={showGrid}
-          onChange={toggleGrid}
-          label="Floor Grid"
-        />
-        <SwitchButton
-          checked={sobelRenderPass}
-          onChange={_toggleSobelRenderPass}
-          label="2D"
-        />
+          <SwitchButton
+            checked={showGrid}
+            onChange={toggleGrid}
+            label="Floor Grid"
+          />
+          <SwitchButton
+            checked={sobelRenderPass}
+            onChange={_toggleSobelRenderPass}
+            label="2D"
+          />
 
-        <ColorPicker
-          disabled={sobelRenderPass}
-          color={materialColor}
-          onChange={setMaterialColor}
-        />
-
+          <ColorPicker
+            disabled={sobelRenderPass}
+            color={materialColor}
+            onChange={setMaterialColor}
+          />
+        </div>
         <button className={styles.download} onClick={download}>
           Download
         </button>
@@ -107,9 +118,8 @@ export function Settings() {
         Made by
         <a target={"_blank"} href="https://twitter.com/ritz078">
           @ritz078
-        </a>
-        <br />
-        Source Code on{" "}
+        </a>{" "}
+        &nbsp; | Code on{" "}
         <a target="_blank" href="https://github.com/ritz078/mannequin">
           GitHub
         </a>
@@ -172,9 +182,9 @@ function SwitchButton({ label, checked, onChange, disabled = false }) {
         checked={checked}
         uncheckedIcon={false}
         checkedIcon={false}
-        onChange={() => {}}
-        height={10}
-        width={26}
+        onChange={onChange}
+        height={8}
+        width={24}
         onColor="#2196f3"
         handleDiameter={16}
       />

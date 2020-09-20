@@ -6,6 +6,12 @@
   flex-direction: column;
   flex-shrink: 0;
   margin: 20px 0 20px 20px;
+
+  @media screen and (max-width: 620px) {
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .settingContent {
@@ -17,15 +23,24 @@
 .footer {
   color: #a2a2a2;
   font-size: 14px;
-  padding: 20px;
+  padding: 20px 10px;
   text-align: center;
   border-top: 1px solid #2d2d2d;
   line-height: 21px;
+  opacity: 0.7;
 
   a {
     color: deepskyblue;
     margin-left: 5px;
     text-decoration: none;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 620px) {
+    padding: 10px;
   }
 }
 
@@ -33,7 +48,11 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding: 20px 0;
+  padding: 10px;
+
+  @media screen and (max-width: 620px) {
+    justify-content: space-between;
+  }
 }
 
 .iconButton {
@@ -68,6 +87,10 @@
   height: 1px;
   width: 100%;
   background-color: #333333;
+
+  @media screen and (max-width: 620px) {
+    margin: 0;
+  }
 }
 
 .title {
@@ -87,6 +110,20 @@
   margin: 0 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   cursor: pointer;
+
+  @media screen and (max-width: 620px) {
+    margin: 0;
+    padding: 10px;
+    width: 50%;
+  }
+}
+
+.switchWrapperContainer {
+  @media screen and (max-width: 620px) {
+    display: flex;
+    margin: 0 10px;
+    flex-wrap: wrap;
+  }
 }
 
 .disabled {
@@ -120,6 +157,10 @@
   width: 100px;
   justify-content: center;
   align-self: center;
+
+  @media screen and (max-width: 620px) {
+    display: none;
+  }
 }
 
 .name {
@@ -129,4 +170,21 @@
   background-size: contain;
   margin: 10px 30px 0px;
   background-position: center;
+  opacity: 0.7;
+  transition: all 200ms;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 620px) {
+    display: none;
+  }
+}
+
+.downloadMobile {
+  display: none;
+  @media screen and (max-width: 620px) {
+    display: block;
+  }
 }
