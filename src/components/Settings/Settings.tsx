@@ -118,10 +118,6 @@ export function Settings() {
         Made by
         <a target={"_blank"} href="https://twitter.com/ritz078">
           @ritz078
-        </a>{" "}
-        &nbsp; | Code on{" "}
-        <a target="_blank" href="https://github.com/ritz078/mannequin">
-          GitHub
         </a>
       </footer>
     </div>

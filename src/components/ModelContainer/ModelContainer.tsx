@@ -21,7 +21,7 @@ import { useSobelRenderPass } from "@hooks/useSobelRenderPass";
 import { useMode } from "@stores/mode";
 import { useScene } from "@stores/scene";
 
-function _ModelContainer() {
+function _ModelContainer({ onInitialModelLoad }) {
   const { scene, gl, camera } = useThree();
   const gridHelperRef = useRef<GridHelper>(null);
   const boneMeshMaterial = useMemo(
@@ -113,7 +113,8 @@ function _ModelContainer() {
       }
     });
     reset();
-  }, [editMode]);
+    onInitialModelLoad(true);
+  }, [editMode, onInitialModelLoad]);
 
   useLoader(modelName, onLoad);
 

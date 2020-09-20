@@ -16,6 +16,7 @@
     "react": "16.13.1",
     "react-color": "^2.18.1",
     "react-dom": "16.13.1",
+    "react-github-corner": "^2.5.0",
     "react-switch": "^5.0.1",
     "react-three-fiber": "^4.2.21",
     "three": "^0.120.1",
