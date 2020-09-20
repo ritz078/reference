@@ -11,4 +11,8 @@ module.exports = withTM({
 
     return config;
   },
+
+  env: {
+    GA: process.env.GA,
+  },
 });
