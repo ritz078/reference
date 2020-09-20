@@ -22,7 +22,7 @@
 
 .footer {
   color: #a2a2a2;
-  font-size: 14px;
+  font-size: 15px;
   padding: 20px 10px;
   text-align: center;
   border-top: 1px solid #2d2d2d;
@@ -181,4 +181,8 @@
   @media screen and (max-width: 620px) {
     display: block;
   }
+}
+
+.switch {
+  pointer-events: none;
 }

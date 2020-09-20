@@ -178,11 +178,12 @@ function SwitchButton({ label, checked, onChange, disabled = false }) {
         checked={checked}
         uncheckedIcon={false}
         checkedIcon={false}
-        onChange={onChange}
+        onChange={() => {}}
         height={8}
         width={24}
         onColor="#2196f3"
         handleDiameter={16}
+        className={styles.switch}
       />
     </div>
   );
