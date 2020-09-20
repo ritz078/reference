@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./Settings.module.scss";
 import Icon from "@mdi/react";
-import { mdiDownload, mdiHumanFemale, mdiHumanMale } from "@mdi/js";
+import { mdiHumanFemale, mdiHumanMale } from "@mdi/js";
 import { IconProps } from "@mdi/react/dist/IconProps";
 import { useEnvironment } from "@stores/environment";
 import Switch from "react-switch";
@@ -15,6 +15,7 @@ import { MODEL_NAME } from "@constants/name";
 interface IconButtonProps extends IconProps {
   label?: string;
   onClick?: () => void;
+  selected?: boolean;
 }
 
 export function Settings() {
@@ -22,7 +23,7 @@ export function Settings() {
   const { materialColor, setMaterialColor } = useMaterial();
   const { editMode, toggleEditMode } = useMode();
   const { sobelRenderPass, toggleSobelRenderPass } = usePostProcessing();
-  const { setModel, renderer } = useScene();
+  const { setModel, renderer, model } = useScene();
 
   const download = useCallback(() => {
     if (!renderer) return;
@@ -51,58 +52,68 @@ export function Settings() {
 
   return (
     <div className={styles.settings}>
-      <div className={styles.gender}>
-        <IconButton
-          title="Male"
-          onClick={() => setModel("male")}
-          path={mdiHumanMale}
+      <div className={styles.name} />
+      <div className={styles.settingContent}>
+        <div className={styles.gender}>
+          <IconButton
+            title="Male"
+            onClick={() => setModel("male")}
+            path={mdiHumanMale}
+            selected={model === "male"}
+          />
+          <IconButton
+            title="Female"
+            onClick={() => setModel("female")}
+            path={mdiHumanFemale}
+            selected={model === "female"}
+          />
+        </div>
+
+        <div className={styles.separator} />
+
+        <SwitchButton
+          onChange={() => {
+            if (sobelRenderPass) {
+              toggleSobelRenderPass();
+            }
+            toggleEditMode();
+          }}
+          checked={editMode}
+          label={"Edit"}
         />
-        <IconButton
-          title="Female"
-          onClick={() => setModel("female")}
-          path={mdiHumanFemale}
+
+        <SwitchButton
+          checked={showGrid}
+          onChange={toggleGrid}
+          label="Floor Grid"
         />
+        <SwitchButton
+          checked={sobelRenderPass}
+          onChange={_toggleSobelRenderPass}
+          label="2D"
+        />
+
+        <ColorPicker
+          disabled={sobelRenderPass}
+          color={materialColor}
+          onChange={setMaterialColor}
+        />
+
+        <button className={styles.download} onClick={download}>
+          Download
+        </button>
       </div>
-
-      <div className={styles.separator} />
-
-      <IconButton
-        title="Download"
-        onClick={download}
-        path={mdiDownload}
-        label="Download"
-        size={0.8}
-      />
-
-      <div className={styles.separator} />
-
-      <SwitchButton
-        onChange={() => {
-          if (sobelRenderPass) {
-            toggleSobelRenderPass();
-          }
-          toggleEditMode();
-        }}
-        checked={editMode}
-        label={"Edit"}
-      />
-
-      <SwitchButton
-        checked={showGrid}
-        onChange={toggleGrid}
-        label="Floor Grid"
-      />
-      <SwitchButton
-        checked={sobelRenderPass}
-        onChange={_toggleSobelRenderPass}
-        label="2D"
-      />
-
-      <ColorPicker
-        disabled={sobelRenderPass}
-        color={materialColor}
-        onChange={setMaterialColor}
-      />
+      <footer className={styles.footer}>
+        Made by
+        <a target={"_blank"} href="https://twitter.com/ritz078">
+          @ritz078
+        </a>
+        <br />
+        Source Code on{" "}
+        <a target="_blank" href="https://github.com/ritz078/mannequin">
+          GitHub
+        </a>
+      </footer>
     </div>
   );
 }
@@ -164,6 +175,7 @@ function SwitchButton({ label, checked, onChange, disabled = false }) {
         onChange={() => {}}
         height={10}
         width={26}
+        onColor="#2196f3"
         handleDiameter={16}
       />
     </div>
@@ -175,10 +187,16 @@ export function IconButton({
   label,
   onClick,
   title,
+  selected,
   ...rest
 }: IconButtonProps) {
   return (
-    <div onClick={onClick} aria-label={title} className={styles.iconButton}>
+    <div
+      onClick={onClick}
+      aria-selected={selected}
+      aria-label={title}
+      className={styles.iconButton}
+    >
       <Icon size={1} title={title} {...rest} />{" "}
       {label && <div className={styles.iconLabel}>{label}</div>}
     </div>

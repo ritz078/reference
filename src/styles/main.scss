@@ -21,10 +21,20 @@ body {
   flex: 1;
 }
 
+.container:focus,
+.container > div:focus,
+.container canvas:focus {
+  outline: none;
+}
+
 .wrapper {
   display: flex;
   flex-direction: row;
   width: 100vw;
   height: 100vh;
   flex: 1;
+}
+
+.chrome-picker {
+  background-color: rgb(255 255 255 / 8%) !important;
 }

@@ -1,5 +1,5 @@
 diff --git a/node_modules/three/src/core/Object3D.d.ts b/node_modules/three/src/core/Object3D.d.ts
-index 2429aeb..547dd3d 100644
+index 76608a8..4a74d13 100644
 --- a/node_modules/three/src/core/Object3D.d.ts
 +++ b/node_modules/three/src/core/Object3D.d.ts
 @@ -14,6 +14,7 @@ import { Raycaster } from './Raycaster';
@@ -10,13 +10,11 @@ index 2429aeb..547dd3d 100644
  
  export let Object3DIdCount: number;
  
-@@ -150,6 +151,10 @@ export class Object3D extends EventDispatcher {
+@@ -180,6 +181,8 @@ export class Object3D extends EventDispatcher {
  	 */
  	readonly isObject3D: true;
  
-+	geometry: Geometry | BufferGeometry;
-+
-+	skeleton: Skeleton;
++  geometry: Geometry | BufferGeometry;
 +
  	/**
  	 * Calls before rendering object

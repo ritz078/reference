@@ -13,7 +13,7 @@ const webRendererOptions = {
   preserveDrawingBuffer: true,
 };
 
-export default function () {
+export default function ModelLoader() {
   return (
     <Canvas
       shadowMap

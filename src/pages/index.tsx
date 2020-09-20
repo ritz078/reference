@@ -6,7 +6,7 @@ const Scene = dynamic(() => import("@components/ModelLoader"), {
   ssr: false,
 });
 
-export default function () {
+export default function App() {
   return (
     <div className="wrapper">
       <Settings />

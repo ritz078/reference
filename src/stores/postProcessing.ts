@@ -1,10 +1,5 @@
 import create from "zustand";
 
-interface IPostProcessing {
-  sobelRenderPass: boolean;
-  toggleSobelRenderPass: () => void;
-}
-
 const [usePostProcessing] = create<IPostProcessing>((set) => ({
   sobelRenderPass: false,
   toggleSobelRenderPass: () => {
@@ -15,3 +10,8 @@ const [usePostProcessing] = create<IPostProcessing>((set) => ({
 }));
 
 export { usePostProcessing };
+
+interface IPostProcessing {
+  sobelRenderPass: boolean;
+  toggleSobelRenderPass: () => void;
+}
