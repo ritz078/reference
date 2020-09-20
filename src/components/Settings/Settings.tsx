@@ -189,7 +189,7 @@ function SwitchButton({ label, checked, onChange, disabled = false }) {
   );
 }
 
-export function IconButton({
+const IconButton = React.memo(function ({
   className,
   label,
   onClick,
@@ -208,4 +208,4 @@ export function IconButton({
       {label && <div className={styles.iconLabel}>{label}</div>}
     </div>
   );
-}
+});
