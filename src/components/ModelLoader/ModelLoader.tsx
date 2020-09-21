@@ -3,7 +3,7 @@ import { Canvas } from "react-three-fiber";
 import { ModelContainer } from "../ModelContainer";
 import styles from "./ModelLoader.module.scss";
 import Icon from "@mdi/react";
-import { mdiCogClockwise, mdiLoading, mdiSnowflake } from "@mdi/js";
+import { mdiSnowflake } from "@mdi/js";
 
 const cameraProps = {
   position: [100, 120, 200],

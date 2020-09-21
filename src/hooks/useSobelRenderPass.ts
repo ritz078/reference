@@ -16,14 +16,12 @@ export function useSobelRenderPass() {
     composer.addPass(renderPass);
 
     const sobelEffect = new ShaderPass(SobelOperatorShader);
-    console.log(sobelEffect);
     sobelEffect.uniforms["resolution"].value.x =
       window.innerWidth * window.devicePixelRatio;
     sobelEffect.uniforms["resolution"].value.y =
       window.innerHeight * window.devicePixelRatio;
 
     composer.addPass(sobelEffect);
-    console.log(composer.readBuffer);
     return composer;
   }, [camera, scene, gl]);
 
