@@ -10,6 +10,10 @@ export default function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <title>Reference</title>
+        <meta
+          name="description"
+          content="An online tool to help you sketch human figures."
+        />
       </Head>
       <Component {...pageProps} />
     </>
