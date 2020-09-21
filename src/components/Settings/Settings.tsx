@@ -110,9 +110,9 @@ export function Settings() {
             onChange={setMaterialColor}
           />
         </div>
-        <button className={styles.download} onClick={download}>
+        <div className={styles.download} onClick={download}>
           Download
-        </button>
+        </div>
       </div>
       <footer className={styles.footer}>
         Made by
