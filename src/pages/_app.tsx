@@ -5,7 +5,9 @@ import Head from "next/head";
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    ReactGA.initialize(process.env.GA);
+    ReactGA.initialize(process.env.GA, {
+      debug: true,
+    });
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
 
