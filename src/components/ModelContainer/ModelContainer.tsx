@@ -116,6 +116,10 @@ function _ModelContainer({ onInitialModelLoad }) {
     onInitialModelLoad(true);
   }, [editMode, onInitialModelLoad]);
 
+  useEffect(() => {
+    onInitialModelLoad(false);
+  }, [modelName]);
+
   useLoader(modelName, onLoad);
 
   useEffect(() => {

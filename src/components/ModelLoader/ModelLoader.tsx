@@ -28,7 +28,6 @@ export default function ModelLoader() {
       )}
       <div
         style={{
-          opacity: isModelLoaded ? 1 : 0,
           display: "flex",
           flex: 1,
         }}
