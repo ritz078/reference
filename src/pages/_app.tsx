@@ -1,16 +1,8 @@
 import "../styles/main.scss";
-import React, { useEffect } from "react";
-import ReactGA from "react-ga";
+import React from "react";
 import Head from "next/head";
 
 export default function MyApp({ Component, pageProps }) {
-  useEffect(() => {
-    ReactGA.initialize(process.env.GA, {
-      debug: true,
-    });
-    ReactGA.pageview(window.location.pathname + window.location.search);
-  }, []);
-
   return (
     <>
       <Head>
