@@ -4,7 +4,10 @@ import ReactGA from "react-ga";
 import Head from "next/head";
 
 export default function MyApp({ Component, pageProps }) {
-  useEffect(() => ReactGA.initialize(process.env.GA), []);
+  useEffect(() => {
+    ReactGA.initialize(process.env.GA);
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
 
   return (
     <>
