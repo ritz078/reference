@@ -32,7 +32,7 @@ export function Settings() {
     const a = document.createElement("a");
     a.href = dataURL;
     a.style.display = "none";
-    a.download = MODEL_NAME;
+    a.download = `${MODEL_NAME}.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
