@@ -31,7 +31,7 @@ export function useTransformOnClick(orbitalControls) {
   }, [transformControls]);
 
   useEffect(() => {
-    function handleClick(ev: MouseEvent) {
+    function handleClick(ev: PointerEvent) {
       if (sobelRenderPass) return;
       ev.preventDefault();
 
