@@ -4707,11 +4707,6 @@ react-dom@16.13.1:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
-react-ga@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-3.1.2.tgz#e13f211c51a2e5c401ea69cf094b9501fe3c51ce"
-  integrity sha512-OJrMqaHEHbodm+XsnjA6ISBEHTwvpFrxco65mctzl/v3CASMSLSyUkFqz9yYrPDKGBUfNQzKCjuMJwctjlWBbw==
-
 react-github-corner@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/react-github-corner/-/react-github-corner-2.5.0.tgz#e350d0c69f69c075bc0f1d2a6f1df6ee91da31f2"
