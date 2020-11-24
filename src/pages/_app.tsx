@@ -11,7 +11,6 @@ export default function MyApp({ Component, pageProps }) {
           name="description"
           content="An online tool to help you sketch human figures."
         />
-        <script async src="https://unpkg.com/thesemetrics@latest"></script>
       </Head>
       <Component {...pageProps} />
     </>
