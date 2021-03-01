@@ -20,7 +20,7 @@
     "react-github-corner": "^2.5.0",
     "react-switch": "^5.0.1",
     "react-three-fiber": "^4.2.21",
-    "three": "^0.120.1",
+    "three": "^0.125.0",
     "zustand": "^2.2.3"
   },
   "devDependencies": {
