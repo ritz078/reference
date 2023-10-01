@@ -2,7 +2,8 @@ export function convertPointerToCoordinate(
   event: PointerEvent,
   domElement: HTMLCanvasElement
 ) {
-  const SIDEBAR_WIDTH = window.screen.width < 620 ? 0 : 290;
+  // const SIDEBAR_WIDTH = window.screen.width < 620 ? 0 : 290;
+  const SIDEBAR_WIDTH = 0;
 
   const x =
     ((event.clientX - SIDEBAR_WIDTH) / domElement.parentElement.clientWidth) *

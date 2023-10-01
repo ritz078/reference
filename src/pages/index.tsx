@@ -10,15 +10,10 @@ const Scene = dynamic(() => import("@components/ModelLoader/ModelLoader"), {
 export default function App() {
   return (
     <div className="wrapper">
-      <Settings />
+      {/*<Settings />*/}
       <div className="container">
         <Scene />
       </div>
-      <GitHubCorners
-        direction="right"
-        href="https://github.com/ritz078/reference"
-        bannerColor={"#333"}
-      />
     </div>
   );
 }

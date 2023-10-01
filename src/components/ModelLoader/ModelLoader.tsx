@@ -32,14 +32,17 @@ export default function ModelLoader() {
           flex: 1,
         }}
       >
-        <Canvas
-          shadowMap
-          invalidateFrameloop={false}
-          camera={cameraProps as any}
-          pixelRatio={window.devicePixelRatio}
-          gl={webRendererOptions}
-        >
-          <ambientLight intensity={1} />
+        <Canvas camera={{ position: [100, 120, 200] }}>
+          {/*<pointLight*/}
+          {/*  position={[50, 50, 200]}*/}
+          {/*  intensity={0.7 * Math.PI}*/}
+          {/*  decay={0}*/}
+          {/*/>*/}
+          {/*<pointLight*/}
+          {/*  position={[50, 50, -200]}*/}
+          {/*  intensity={0.7 * Math.PI}*/}
+          {/*  decay={0}*/}
+          {/*/>*/}
 
           <ModelContainer onInitialModelLoad={setIsModelLoaded} />
         </Canvas>
