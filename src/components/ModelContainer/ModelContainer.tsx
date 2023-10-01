@@ -11,6 +11,7 @@ import {
   SpotLight,
   SphereGeometry,
   SpotLightHelper,
+  SkeletonHelper,
 } from "three";
 import { useTransformOnClick } from "@hooks/useTransformOnClick";
 import { useLoader } from "@hooks/useLoader";
@@ -44,7 +45,7 @@ function _ModelContainer({ onInitialModelLoad }) {
       scene.remove(gridHelperRef.current);
     }
 
-    if (!showGrid) {
+    if (showGrid) {
       const gridHelper = new GridHelper(1000, 50);
       gridHelperRef.current = gridHelper;
       scene.add(gridHelper);
@@ -100,7 +101,7 @@ function _ModelContainer({ onInitialModelLoad }) {
     model.traverse((object) => {
       if (object instanceof SkinnedMesh) {
         if (object.material instanceof MeshStandardMaterial) {
-          object.material.wireframe = false;
+          object.material.wireframe = true;
         }
 
         const bbox = object.geometry.boundingBox;
@@ -111,6 +112,9 @@ function _ModelContainer({ onInitialModelLoad }) {
         rootBone.add(mesh);
 
         bbox.setFromObject(rootBone);
+
+        const helper = new SkeletonHelper(mesh);
+        scene.add(helper);
       }
     });
     reset();
@@ -128,9 +132,9 @@ function _ModelContainer({ onInitialModelLoad }) {
     spotLight.position.set(50, 50, 200);
     spotLight.decay = 0;
 
-    // const spolightHelper = new SpotLightHelper(spotLight, "#000000");
+    const spolightHelper = new SpotLightHelper(spotLight, "#000000");
     scene.add(spotLight);
-    // scene.add(spolightHelper);
+    scene.add(spolightHelper);
 
     // const spotLightBack = new SpotLight(0xffffff, 0.7 * Math.PI);
     // spotLightBack.position.set(50, 50, -200);

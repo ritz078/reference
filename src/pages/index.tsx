@@ -10,6 +10,7 @@ export default function App() {
     <div className="wrapper">
       {/*<Settings />*/}
       <div className="container">
+        {/* @ts-ignore */}
         <Scene />
       </div>
     </div>
