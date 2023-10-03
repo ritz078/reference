@@ -5,11 +5,13 @@ import {
   SkinnedMesh,
   Mesh,
   MeshBasicMaterial,
-  SphereBufferGeometry,
   MeshStandardMaterial,
   GridHelper,
   Color,
   SpotLight,
+  SphereGeometry,
+  SpotLightHelper,
+  SkeletonHelper,
 } from "three";
 import { useTransformOnClick } from "@hooks/useTransformOnClick";
 import { useLoader } from "@hooks/useLoader";
@@ -28,7 +30,7 @@ function _ModelContainer({ onInitialModelLoad }) {
     () =>
       new MeshBasicMaterial({
         color: "red",
-        wireframe: true,
+        wireframe: false,
       }),
     []
   );
@@ -67,7 +69,7 @@ function _ModelContainer({ onInitialModelLoad }) {
     model?.traverse((object) => {
       if (object instanceof SkinnedMesh) {
         if (object.material instanceof MeshStandardMaterial) {
-          object.material.wireframe = editMode;
+          object.material.wireframe = false;
         }
       }
     });
@@ -99,17 +101,20 @@ function _ModelContainer({ onInitialModelLoad }) {
     model.traverse((object) => {
       if (object instanceof SkinnedMesh) {
         if (object.material instanceof MeshStandardMaterial) {
-          object.material.wireframe = editMode;
+          object.material.wireframe = true;
         }
 
         const bbox = object.geometry.boundingBox;
         const rootBone = object.skeleton.bones[0];
 
-        const mesh = new Mesh(new SphereBufferGeometry(2.5), boneMeshMaterial);
+        const mesh = new Mesh(new SphereGeometry(1.5), boneMeshMaterial);
         mesh.name = object.id.toString(10);
         rootBone.add(mesh);
 
         bbox.setFromObject(rootBone);
+
+        const helper = new SkeletonHelper(mesh);
+        scene.add(helper);
       }
     });
     reset();
@@ -123,15 +128,19 @@ function _ModelContainer({ onInitialModelLoad }) {
   useLoader(modelName, onLoad);
 
   useEffect(() => {
-    const spotLight = new SpotLight(0xffffff, 0.7);
-    spotLight.position.set(50, 50, 300);
+    const spotLight = new SpotLight(0xffffff, 0.7 * Math.PI);
+    spotLight.position.set(50, 50, 200);
+    spotLight.decay = 0;
+
+    const spolightHelper = new SpotLightHelper(spotLight, "#000000");
     scene.add(spotLight);
+    scene.add(spolightHelper);
 
-    const spotLightBack = new SpotLight(0xffffff, 0.7);
-    spotLightBack.position.set(50, 50, -300);
-    scene.add(spotLightBack);
-
-    setRenderer(gl);
+    // const spotLightBack = new SpotLight(0xffffff, 0.7 * Math.PI);
+    // spotLightBack.position.set(50, 50, -200);
+    // spotLightBack.decay = 0;
+    // scene.add(spotLightBack);
+    // setRenderer(gl);
   }, []);
 
   return null;
